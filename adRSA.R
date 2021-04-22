@@ -67,51 +67,25 @@ stopifnot(c(
     ))
 
 
-if (FALSE)
+while(1)
 {
-    if (c == 3)
+    p = trunc(runif(1, c, mx))
+    q = trunc(runif(1, c, mx))
+    if (p==q)
+        next
+    if (!all(abs(q / 2:(q-1) - trunc(q / 2:(q-1))) > epsilon))
+        next
+    if (!all(abs(p / 2:(p-1) - trunc(p / 2:(p-1))) > epsilon))
+        next
+    Npq = (p-1) * (q-1)
+    if (Npq/c - trunc(Npq/c) != 0)
     {
-        p = 11
-        q = 5
-        x = 41
-        
-        p = 11
-        q = 17
-        x = 128
-        
-        p = 17
-        q = 23
-        x = 333
-    } else if (c == 5)
-    {
-        p = 17 
-        q = 13 
-        x = 111
-    } else
-    {
-        stop("not implemented")
+        x = trunc(runif(1, p*q/2, p*q))
+        cat(sprintf("p=%g q=%g x=%g\n", p, q, x))
+        break
     }
-}else
-{
-    while(1)
-    {
-        p = trunc(runif(1, c, mx))
-        q = trunc(runif(1, c, mx))
-        if (p==q)
-            next
-        if (!all(abs(q / 2:(q-1) - trunc(q / 2:(q-1))) > epsilon))
-            next
-        if (!all(abs(p / 2:(p-1) - trunc(p / 2:(p-1))) > epsilon))
-            next
-        Npq = (p-1) * (q-1)
-        if (Npq/c - trunc(Npq/c) != 0)
-        {
-            x = trunc(runif(1, p*q/2, p*q))
-            cat(sprintf("p=%g q=%g x=%g\n", p, q, x))
-            break
-        }
-    }    
-}
+}    
+
 
 N = p * q
 N   
