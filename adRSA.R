@@ -55,6 +55,7 @@ if (FALSE)
 modpow = function(base, exponent, modulus) 
     sapply(exponent, function(it) modpows(base, it, modulus))
 
+# modpow tests
 stopifnot(c(
     modpow(5, 3, 13) == 5^3 %% 13,
     modpow(2, 100, 7) == 2,
@@ -159,7 +160,7 @@ cat("OK!\n")
 # https://www.scottaaronson.com/qclec.pdf, lecture 19
 # "the period of f might not equal φ(N), the most we can say is that the period divides φ(N)"
 #
-if(F)
+if (FALSE)
 {
     which(modpow(retval, 1:Npq, N) == x)
     which(modpow(retval, 1:Npq, N) == 1)
@@ -177,11 +178,11 @@ if(F)
 # ------- period attack (classical)
 
 # (you can pick your own x until it meets "we get lucky" conditions)
-if( T &&
-     mx <= 100 &&
-     abs(x/p - trunc(x/p) > epsilon) &&
-     abs(x/q - trunc(x/q) > epsilon)
-  )  # we get lucky
+if (TRUE &&
+    mx <= 100 &&
+    abs(x/p - trunc(x/p) > epsilon) &&
+    abs(x/q - trunc(x/q) > epsilon)
+   ) # we get lucky
 {  
     # period search
     period = diff(which(modpow(x, 1:N, N) == 1))
@@ -195,7 +196,7 @@ if( T &&
         xs2 = modpow(x, period/2, N)
         if (xs2 > 1 && xs2 < N - 1) # we get lucky (again)
         {
-            if (F)
+            if (FALSE)
             {
                 ((xs2 + 1) * (xs2 - 1)) %% N
                 gcd(xs2 - 1, N)
