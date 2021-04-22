@@ -1,6 +1,7 @@
 # ad RSA encryption
 #
 # https://www.scottaaronson.com/democritus/lec8.html
+# https://www.scottaaronson.com/qclec.pdf
 #
 #
 library(Rcpp)
@@ -139,7 +140,6 @@ if(FALSE)
 # by raising the retval to the next powers, it jumps over c positions in a row
 # but k is such that (c * k) stands next to the end of the period (p-1)(q-1), right where x sits
 # (after the end of the period there is 1, because it is a copy of x^0, the next is x^1)
-
 k = which((c*(1:Npq)) %% Npq == 1)[1]
 stopifnot(!is.na(k))
 k
@@ -151,11 +151,22 @@ res = modpow(retval, k, N)
 stopifnot(res == x)
 cat("OK!\n")
 
+
 # -------
 # + it looks like the period is a few shorter than Npq - that's interesting
+# ok:
+# https://www.scottaaronson.com/qclec.pdf, lecture 19
+# here it is confirmed:
+# "the period of f might not equal φ(N), the most we can say is that the period divides φ(N)"
+#
 if(F)
 {
     which(modpow(retval, 1:Npq, N) == x)
+    which(modpow(retval, 1:Npq, N) == 1)
+    modpow(retval, k, N)
+    plot(1:(Npq),modpow(x, 1:(Npq), N), type = 'l', col = 'blue')
+    diff(which(modpow(x, 1:(Npq), N) == 1))
+
     diff(which(modpow(retval, 1:Npq, N) == x))
     f = diff(which(modpow(retval, 1:Npq, N) == x))[1]
     print(Npq/f)
