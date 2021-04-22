@@ -981,23 +981,25 @@ sqrt(N)
 # Deutsch-Jozsa
 # "One of the ways we can guarantee our circuit is balanced is by performing a CNOT for each qubit..."
 #
-REV_4b = multikron(I, SW, I) %*% multikron(SW, SW) %*% multikron(I, SW, I) %*% multikron(SW, SW)
-REV_3b = multikron(I, SW) %*% multikron(SW, I) %*% multikron(I, SW)
-all(REV_3b == multikron(SW, I) %*% multikron(I, SW) %*% multikron(SW, I))
-stopifnot(REV_4b %*% REV_4b == multikron(rep(list(I), 4)))
-stopifnot(REV_3b %*% REV_3b == multikron(rep(list(I), 3)))
+REV4 = multikron(I, SW, I) %*% multikron(SW, SW) %*% multikron(I, SW, I) %*% multikron(SW, SW)
+REV3 = multikron(I, SW) %*% multikron(SW, I) %*% multikron(I, SW)
+all(REV3 == multikron(SW, I) %*% multikron(I, SW) %*% multikron(SW, I))
+stopifnot(REV4 %*% REV4 == multikron(rep(list(I), 4)))
+stopifnot(REV3 %*% REV3 == multikron(rep(list(I), 3)))
 
-rev_bits = function(n)
+# reverse bits
+revBits = function(n)
 {
     res = diag(0, 2^n)
     for(x in 0:(2^n-1))
         res[, 1+x] = as.qubit(sum(as.bits(x,n) * 2^(0:(n-1))), n)
     res
 }
-stopifnot(rev_bits(2) == SW)
-stopifnot(all(rev_bits(3) == REV_3b))
-stopifnot(all(rev_bits(4) == REV_4b))
+stopifnot(revBits(2) == SW)
+stopifnot(all(revBits(3) == REV3))
+stopifnot(all(revBits(4) == REV4))
 
+# switch selected bits 
 # bit indexes: ..543210
 selSW = function(b1, b2, n)
 {
@@ -1034,7 +1036,7 @@ CX13r = multikron(I, SW, I) %*% multikron(I, I, CX) %*% multikron(I, SW, I)
 CX23r = multikron(I, I, CX)
 balanced_right = CX23r %*% CX13r %*% CX03r 
 
-stopifnot(all(balanced_left == REV_4b %*% balanced_right %*% REV_4b))
+stopifnot(all(balanced_left == REV4 %*% balanced_right %*% REV4))
 
 all(CX03r == selSW(1, 3, 4) %*% multikron(I, I, CX) %*% selSW(1, 3, 4))
 all(CX03l == selSW(2, 0, 4) %*% multikron(SW %*% CX %*% SW, I, I) %*% selSW(2, 0, 4))
