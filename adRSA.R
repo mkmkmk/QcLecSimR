@@ -172,3 +172,59 @@ if(F)
     modpow(x, 0:k, N)
     modpow(retval, 0:(k+10), N)
 }
+
+# ------- period attack (classical)
+
+# (you can pick your own x until it meets "we get lucky" conditions)
+if( T &&
+     mx <= 100 &&
+     abs(x/p - trunc(x/p) > epsilon) &&
+     abs(x/q - trunc(x/q) > epsilon)
+  )  # we get lucky
+{  
+    # period search
+    period = diff(which(modpow(x, 1:N, N) == 1))
+    stopifnot(abs(max(period) - min(period)) < epsilon)
+    period = period[1]
+    
+    rec = NA
+    
+    if (period %% 2 == 0) # we get lucky (again)
+    {
+        xs2 = modpow(x, period/2, N)
+        if (xs2 > 1 && xs2 < N - 1) # we get lucky (again)
+        {
+            if (F)
+            {
+                ((xs2 + 1) * (xs2 - 1)) %% N
+                pracma::gcd(xs2 - 1, N)
+                pracma::gcd(xs2 + 1, N)
+                c((xs2 - 1) / p, (xs2 - 1) / q, (xs2 + 1) / p, (xs2 + 1) / q)
+                pmul = (xs2 - 1) / p
+                qmul = (xs2 - 1) / q
+                pracma::gcd(p*pmul, p*q)
+                pracma::gcd(q*qmul, p*q)
+            }
+            cat("we get lucky\n")        
+            rec = max(pracma::gcd(xs2 - 1, N), pracma::gcd(xs2 + 1, N))
+        }
+    }
+
+    # less lucky
+    if (is.na(rec)) 
+    {
+        # here is a little cheat because Npq should not be known,
+        # but maybe this can be circumvented e.g. by checking all pre-matching multipliers?
+        mul = Npq / period 
+        paq = N - period * mul + 1
+        # p^2 - paq*p + N = 0 --> quadratic equation
+        d = paq^2 - 4*N  # ---> b^2 - 4*a*c
+        stopifnot(d >= 0)
+        rec = max( (paq + sqrt(d)) / 2, (paq - sqrt(d)) / 2) # ---> (-b +/- sqrt(d))/(2*a)
+    }
+    
+    cat(sprintf("recovered (p or q) = %d\n", rec))
+    stopifnot(any(abs(c(q, p) - rec) < epsilon))
+
+}
+
