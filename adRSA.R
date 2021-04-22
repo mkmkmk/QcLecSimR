@@ -4,6 +4,8 @@
 # https://www.scottaaronson.com/qclec.pdf
 #
 #
+#   Author:  Mariusz Krej
+#
 library(Rcpp)
 library(pracma)
 
