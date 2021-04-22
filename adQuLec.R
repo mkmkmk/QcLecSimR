@@ -981,48 +981,6 @@ sqrt(N)
 # Deutsch-Jozsa
 # "One of the ways we can guarantee our circuit is balanced is by performing a CNOT for each qubit..."
 #
-REV4 = multikron(I, SW, I) %*% multikron(SW, SW) %*% multikron(I, SW, I) %*% multikron(SW, SW)
-REV3 = multikron(I, SW) %*% multikron(SW, I) %*% multikron(I, SW)
-all(REV3 == multikron(SW, I) %*% multikron(I, SW) %*% multikron(SW, I))
-stopifnot(REV4 %*% REV4 == multikron(rep(list(I), 4)))
-stopifnot(REV3 %*% REV3 == multikron(rep(list(I), 3)))
-
-# reverse bits
-revBits = function(n)
-{
-    res = diag(0, 2^n)
-    for(x in 0:(2^n-1))
-        res[, 1+x] = as.qubit(sum(as.bits(x,n) * 2^(0:(n-1))), n)
-    res
-}
-stopifnot(revBits(2) == SW)
-stopifnot(all(revBits(3) == REV3))
-stopifnot(all(revBits(4) == REV4))
-
-# switch selected bits 
-# bit indexes: ..543210
-selSW = function(b1, b2, n)
-{
-    stopifnot(b1 < n && b2 < n && b1 >= 0 && b2 >= 0)
-    b1 = n - 1 - b1
-    b2 = n - 1 - b2
-    res = diag(0, 2^n)
-    for(x in 0:(2^n-1))
-    {
-        bts = as.bits(x, n)
-        mem = bts[1+b1]
-        bts[1+b1] = bts[1+b2]
-        bts[1+b2] = mem
-        res[, 1+x] = as.qubit(sum(2^((n-1):0) * bts), n)
-    }
-    res
-}
-stopifnot(selSW(1, 0, 2)  == SW)
-stopifnot(selSW(1, 0, 3) == kronecker(I, SW))
-stopifnot(selSW(1, 2, 4) == multikron(I, SW, I))
-stopifnot(selSW(3, 2, 4) == multikron(SW, I, I))
-stopifnot(selSW(1, 2, 4) == selSW(2, 1, 4))
-
 
 # oracle bit - leftmost bit (bit0, bit ids: 3210)
 CX03l = multikron(I, I, SW) %*% multikron(I, SW, I) %*% multikron(SW %*% CX %*% SW, I, I) %*% multikron(I, SW, I) %*% multikron(I, I, SW) 
