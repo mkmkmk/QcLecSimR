@@ -5,6 +5,7 @@
 #
 #
 library(Rcpp)
+library(pracma)
 
 epsilon = 1e-12
 
@@ -197,16 +198,16 @@ if( T &&
             if (F)
             {
                 ((xs2 + 1) * (xs2 - 1)) %% N
-                pracma::gcd(xs2 - 1, N)
-                pracma::gcd(xs2 + 1, N)
+                gcd(xs2 - 1, N)
+                gcd(xs2 + 1, N)
                 c((xs2 - 1) / p, (xs2 - 1) / q, (xs2 + 1) / p, (xs2 + 1) / q)
                 pmul = (xs2 - 1) / p
                 qmul = (xs2 - 1) / q
-                pracma::gcd(p*pmul, p*q)
-                pracma::gcd(q*qmul, p*q)
+                gcd(p*pmul, p*q)
+                gcd(q*qmul, p*q)
             }
             cat("we get lucky\n")        
-            rec = max(pracma::gcd(xs2 - 1, N), pracma::gcd(xs2 + 1, N))
+            rec = max(gcd(xs2 - 1, N), gcd(xs2 + 1, N))
         }
     }
 
