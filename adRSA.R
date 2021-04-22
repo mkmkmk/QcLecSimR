@@ -154,9 +154,8 @@ cat("OK!\n")
 
 # -------
 # + it looks like the period is a few shorter than Npq - that's interesting
-# ok:
+# ok, here it is confirmed:
 # https://www.scottaaronson.com/qclec.pdf, lecture 19
-# here it is confirmed:
 # "the period of f might not equal φ(N), the most we can say is that the period divides φ(N)"
 #
 if(F)
