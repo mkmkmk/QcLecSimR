@@ -1099,8 +1099,6 @@ if (FALSE)
 }
 
 
-
-
 SW %*% CX %*% SW 
 
 qft = function(n)

@@ -154,7 +154,7 @@ if (FALSE)
 # ------- period attack (classical)
 
 # (you can pick your own x until it meets "we get lucky" conditions)
-if (TRUE &&
+if (
     mx <= 100 &&
     abs(x/p - trunc(x/p) > epsilon) &&
     abs(x/q - trunc(x/q) > epsilon)

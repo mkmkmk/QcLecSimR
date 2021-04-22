@@ -2,7 +2,6 @@
 # QuSimR "library" code
 #
 #
-#
 #   Author:  Mariusz Krej
 #
 # ----------------------
@@ -27,7 +26,7 @@ qmm = kronecker(qm,qm) #  |--〉
 
 I = diag(1, 2)
 NOT = 1 - I
-CNOT = kronecker (q0 %*% t(q0), I) + kronecker (q1 %*% t(q1), NOT)
+CNOT = kronecker(q0 %*% t(q0), I) + kronecker(q1 %*% t(q1), NOT)
 CX = CNOT
 ROT = function(th) matrix(c(cos(th), sin(th), -sin(th), cos(th)), 2, 2)
 
@@ -69,7 +68,7 @@ toStateTb = function(th, phi)
     round(q0 %*% t(cos(th/2)) + q1 %*% t(exp(1i*phi)*sin(th/2)), 10)
 
 toState = function(bloch)
-    toStateTb(bloch[1],  bloch[2])
+    toStateTb(bloch[1], bloch[2])
 
 # post partial measurement state
 # measBasis - measurement basis-state list
@@ -97,6 +96,8 @@ multikron = function(...)
         res = kronecker(res, inp[[ii]])
     res
 }
+
+# tests
 stopifnot(all(multikron(I) == I))
 stopifnot(all(multikron(I,H) == IH))
 stopifnot(all(multikron(H,I,I) == kronecker(HI, I)))
@@ -116,6 +117,8 @@ as.qubit = function(inp, nbits = NA)
     ket[1 + inp] = 1
     ket
 }
+
+# tests
 stopifnot(as.qubit(0) == q0)
 stopifnot(as.qubit(1) == q1)
 stopifnot(as.qubit(3) == q11)
@@ -134,6 +137,7 @@ as.bits = function(inp, nbits = NA)
     rev(as.integer(intToBits(inp)[1:nbits]))
 }
 
+# tests
 stopifnot(as.bits(0) == c(0))
 stopifnot(as.bits(1) == c(1))
 stopifnot(as.bits(2) == c(1, 0))
@@ -143,8 +147,8 @@ stopifnot(as.bits(7) == c(1, 1, 1))
 stopifnot(as.bits(8) == c(1, 0, 0, 0))
 stopifnot(as.bits(15) == c(1, 1, 1, 1))
 stopifnot(as.bits(16) == c(1, 0, 0, 0, 0))
-stopifnot(length(as.bits(65535)) == 16)
-stopifnot(length(as.bits(65536)) == 17)
+stopifnot(length(as.bits(2^16 - 1)) == 16)
+stopifnot(length(as.bits(2^16)) == 17)
 
 REV4 = multikron(I, SW, I) %*% multikron(SW, SW) %*% multikron(I, SW, I) %*% multikron(SW, SW)
 REV3 = multikron(I, SW) %*% multikron(SW, I) %*% multikron(I, SW)
@@ -160,9 +164,11 @@ revBits = function(n)
         res[, 1+x] = as.qubit(sum(as.bits(x,n) * 2^(0:(n-1))), n)
     res
 }
+
+# tests
 stopifnot(revBits(2) == SW)
-stopifnot(all(revBits(3) == REV3))
-stopifnot(all(revBits(4) == REV4))
+stopifnot(revBits(3) == REV3)
+stopifnot(revBits(4) == REV4)
 
 # switch selected bits 
 # bit indexes: ..543210
@@ -182,7 +188,9 @@ selSW = function(b1, b2, n)
     }
     res
 }
-stopifnot(selSW(1, 0, 2)  == SW)
+
+# tests
+stopifnot(selSW(1, 0, 2) == SW)
 stopifnot(selSW(1, 0, 3) == kronecker(I, SW))
 stopifnot(selSW(1, 2, 4) == multikron(I, SW, I))
 stopifnot(selSW(3, 2, 4) == multikron(SW, I, I))
