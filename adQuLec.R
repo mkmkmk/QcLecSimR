@@ -20,6 +20,7 @@ if (FALSE)
 
 source("quSimLib.R")
 
+epsilon = 1e-12    
 
 # ------ ad (2.8)
 {
@@ -903,7 +904,7 @@ for (ix in 1:2^n - 1)
         left[[i]] = if (x[i] == 0) H %*% q0 else H %*% q1
     
     left = multikron(left)
-    stopifnot(max(Mod(left - right)) < 1e-12)
+    stopifnot(max(Mod(left - right)) < epsilon)
 }
 
 
@@ -926,7 +927,7 @@ for(si in 1:2^n - 1)
     }
     inner = t(t(inner)) / sqrt(2^n)
     Hn = multikron(rep(list(H), n))
-    stopifnot(max(Mod(Hn %*% inner - ket_s)) < 1e-12)
+    stopifnot(max(Mod(Hn %*% inner - ket_s)) < epsilon)
 }
 
 
@@ -1111,7 +1112,7 @@ qft = function(n)
     res / sqrt(n)
 }
 
-stopifnot(max(Mod(qft(2) - H)) < 1e-12)
+stopifnot(max(Mod(QFT(2) - H)) < epsilon)
 B2 = matrix(c(1,0,0,1i), 2)
 qft(4)
 
