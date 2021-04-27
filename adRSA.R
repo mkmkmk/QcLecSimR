@@ -108,8 +108,8 @@ if (FALSE)
 
 # (you can pick your own x until it meets "we get lucky" conditions)
 if (
-    abs(x/p - trunc(x/p) > epsilon) &&
-    abs(x/q - trunc(x/q) > epsilon)
+    abs(x/p - trunc(x/p)) > epsilon &&
+    abs(x/q - trunc(x/q)) > epsilon
    ) # we get lucky
 {  
     cat("period search...")
