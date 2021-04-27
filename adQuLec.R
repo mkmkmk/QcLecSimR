@@ -20,7 +20,6 @@ if (FALSE)
 
 source("quSimLib.R")
 
-epsilon = 1e-12    
 
 # ------ ad (2.8)
 {

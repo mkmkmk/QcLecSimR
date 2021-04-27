@@ -5,6 +5,8 @@
 #   Author:  Mariusz Krej
 #
 # ----------------------
+epsilon = 1e-12    
+
 
 q0 = t(t(1:0))  # |0〉
 q1 = t(t(0:1))  # |1〉
@@ -196,3 +198,13 @@ stopifnot(selSW(1, 2, 4) == multikron(I, SW, I))
 stopifnot(selSW(3, 2, 4) == multikron(SW, I, I))
 stopifnot(selSW(1, 2, 4) == selSW(2, 1, 4))
 
+
+ctr_gate = function(gate)
+{
+    n = nrow(gate)
+    stopifnot(abs(2^round(log2(n)) - n) < epsilon)
+    I_n = multikron(rep(list(I), log2(n)))
+    zeros = diag(0, n)
+    rbind(cbind(I_n, zeros), cbind(zeros, gate))
+}
+stopifnot(Mod(ctr_gate(gate = NOT) - CNOT) < epsilon)
