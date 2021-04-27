@@ -1234,4 +1234,36 @@ all(Mod(rQFT4 %*% rQFT4 - CNOT) < epsilon)
 all(Mod(QFT4 %*% t(Conj(QFT4)) - II) < epsilon)
 
 
- 
+# ----- AD lecture 21
+
+
+# --- ad Continued Fraction
+rfun1 = function(a, i) if(i < 100) 1 + 1 / rfun1(a, i+1) else a
+rfun1(1, 1) - (1 + sqrt(5)) / 2
+
+cfract = function(r, iter = 50)
+{
+    i = 1
+    tbi = c()
+    for (ii in 1:iter)
+    {
+        i = trunc(r)
+        r = r - i
+        tbi = c(tbi, i)
+        if (abs(r) < epsilon)
+            break
+        r = 1 / r
+    }
+    res = "-"
+    for(i in rev(tbi))
+        res = if (res != "-") sprintf("%g+1/(%s)", i, res) else sprintf("%g", i)
+    res
+}
+
+cfract(pi, 4)
+eval(parse(text = cfract(pi, 4))) - pi
+3+16/113 - pi
+355/113 - pi
+
+cfract(pi)
+abs(eval(parse(text = cfract(pi))) - pi) < 1e-100
