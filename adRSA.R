@@ -16,26 +16,12 @@ c = 7
 c = 5
 c = 3
 
-mx = 10000
-mx = 1000
-mx = 100 
 mx = 50
+mx = 100 
+mx = 1000
+
 
 # https://en.wikipedia.org/wiki/Modular_exponentiation
-cfun = 
-    "
-        // [[Rcpp::export]]
-        double modpows(int base, int exponent, int modulus)
-        {
-            if (modulus <= 1)
-               return 0;
-            long long c = 1LL;
-            for (int i = 0; i < exponent; ++i)
-               c = (c * base) % modulus;
-            return c;
-        }
-    "
-sourceCpp(code = cfun)
 
 if (FALSE)
 {
@@ -54,11 +40,65 @@ if (FALSE)
     }
 }
 
+if (FALSE)
+{
+    cfun = 
+        "
+            // [[Rcpp::export]]
+            double modpows(int base, int exponent, long long modulus)
+            {
+                if (modulus <= 1)
+                   return 0;
+                long long c = 1LL;
+                for (int i = 0; i < exponent; ++i)
+                   c = (c * base) % modulus;
+                return c;
+            }
+        "
+    sourceCpp(code = cfun)
+} 
+
+if (TRUE)
+{
+    # repeated squaring power modulo
+    cfun = 
+        "
+            // repeated squaring power modulo
+            // [[Rcpp::export]]
+            double modpows(int base, int exponent, long long modulus)
+            {
+                if (modulus <= 1)
+                    return 0;
+                if (exponent < 1)
+                    return 1;
+                long long res = 1LL;
+                for (int i = 0; i < 32; ++i)
+                {
+                    if (exponent & 1)
+                    {
+                        long long ires = base;
+                        for (int k = 0; k < i; ++k)
+                            ires = (ires * ires) % modulus;
+                        res = (res * ires) % modulus;
+                    }
+                    exponent >>= 1;
+                    if (!exponent)
+                        break;
+                }
+                return res;
+            }
+        "
+    sourceCpp(code = cfun)
+}
+
 modpow = function(base, exponent, modulus) 
     sapply(exponent, function(it) modpows(base, it, modulus))
 
 # modpow tests
 stopifnot(c(
+    modpow(5, 0, 13) == 1,
+    modpow(5, 1, 13) == 5,
+    modpow(777, 1, 13) == 777 %% 13,
     modpow(5, 3, 13) == 5^3 %% 13,
     modpow(2, 100, 7) == 2,
     modpow(3, 100, 7) == 4,
@@ -155,16 +195,16 @@ if (FALSE)
 
 # (you can pick your own x until it meets "we get lucky" conditions)
 if (
-    mx <= 100 &&
     abs(x/p - trunc(x/p) > epsilon) &&
     abs(x/q - trunc(x/q) > epsilon)
    ) # we get lucky
 {  
-    # period search
+    cat("period search...")
     period = diff(which(modpow(x, 1:N, N) == 1))
     stopifnot(abs(max(period) - min(period)) < epsilon)
     period = period[1]
-    
+    cat("ok\n")
+        
     rec = NA
     
     if (period %% 2 == 0) # we get lucky (again)
