@@ -172,9 +172,9 @@ stopifnot(revBits(2) == SW)
 stopifnot(revBits(3) == REV3)
 stopifnot(revBits(4) == REV4)
 
-# switch selected bits 
+# swap selected bits 
 # bit indexes: ..543210
-selSW = function(b1, b2, n)
+swap = function(b1, b2, n)
 {
     stopifnot(b1 < n && b2 < n && b1 >= 0 && b2 >= 0)
     b1 = n - 1 - b1
@@ -192,11 +192,11 @@ selSW = function(b1, b2, n)
 }
 
 # tests
-stopifnot(selSW(1, 0, 2) == SW)
-stopifnot(selSW(1, 0, 3) == kronecker(I, SW))
-stopifnot(selSW(1, 2, 4) == multikron(I, SW, I))
-stopifnot(selSW(3, 2, 4) == multikron(SW, I, I))
-stopifnot(selSW(1, 2, 4) == selSW(2, 1, 4))
+stopifnot(swap(1, 0, 2) == SW)
+stopifnot(swap(1, 0, 3) == kronecker(I, SW))
+stopifnot(swap(1, 2, 4) == multikron(I, SW, I))
+stopifnot(swap(3, 2, 4) == multikron(SW, I, I))
+stopifnot(swap(1, 2, 4) == swap(2, 1, 4))
 
 
 ctr_gate = function(gate)

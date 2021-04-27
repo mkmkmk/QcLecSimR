@@ -996,8 +996,8 @@ balanced_right = CX23r %*% CX13r %*% CX03r
 
 stopifnot(all(balanced_left == REV4 %*% balanced_right %*% REV4))
 
-all(CX03r == selSW(1, 3, 4) %*% multikron(I, I, CX) %*% selSW(1, 3, 4))
-all(CX03l == selSW(2, 0, 4) %*% multikron(SW %*% CX %*% SW, I, I) %*% selSW(2, 0, 4))
+all(CX03r == swap(1, 3, 4) %*% multikron(I, I, CX) %*% swap(1, 3, 4))
+all(CX03l == swap(2, 0, 4) %*% multikron(SW %*% CX %*% SW, I, I) %*% swap(2, 0, 4))
 
 all(multikron(SW %*% CX %*% SW, I, I) == multikron(SW, I, I) %*% multikron(CX, I, I) %*% multikron(SW, I, I) )
 
@@ -1136,17 +1136,17 @@ preF8 = 2^-.5 * rbind(cbind(QFT4, B4 %*% QFT4), cbind(QFT4, -B4 %*% QFT4))
 # abc
 # acb
 # cab
-ROT3 = selSW(2, 1, 3) %*% selSW(0, 1, 3)
+ROT3 = swap(2, 1, 3) %*% swap(0, 1, 3)
 all(Mod(preF8 %*% ROT3 - QFT8) < epsilon)
 
 #abc
 #cab
 REV3
 REV3 - multikron(I, SW) %*% multikron(SW, I) %*% multikron(I, SW)
-REV3 - selSW(0, 1, 3) %*% selSW(2, 1, 3) %*% selSW(0, 1, 3)
-REV3 - selSW(0, 1, 3) %*% ROT3
-selSW(0, 1, 3) %*% REV3 - selSW(0, 1, 3) %*% selSW(0, 1, 3) %*% ROT3
-selSW(0, 1, 3) %*% REV3 - ROT3
+REV3 - swap(0, 1, 3) %*% swap(2, 1, 3) %*% swap(0, 1, 3)
+REV3 - swap(0, 1, 3) %*% ROT3
+swap(0, 1, 3) %*% REV3 - swap(0, 1, 3) %*% swap(0, 1, 3) %*% ROT3
+swap(0, 1, 3) %*% REV3 - ROT3
 
 ZR4 = diag(0, 4)
 
@@ -1200,12 +1200,12 @@ stopifnot(Mod(multikron(I, H) %*% CB3 %*% multikron(H, I) %*% SW - rQFT4) < epsi
 # ----- QFT8
 rQFT8 = REV3 %*% QFT8 %*% REV3
 stopifnot(Mod(multikron(H, II) %*% CB4 %*% multikron(I, QFT4) %*% ROT3 - QFT8) < epsilon)
-stopifnot(Mod(multikron(H, II) %*% CB4 %*% multikron(I, QFT4) %*% selSW(0, 1, 3) %*% REV3 - QFT8) < epsilon)
+stopifnot(Mod(multikron(H, II) %*% CB4 %*% multikron(I, QFT4) %*% swap(0, 1, 3) %*% REV3 - QFT8) < epsilon)
 
 # qclec QFT8 with un-reversed QFT4
 stopifnot(Mod(multikron(H, II) %*% CB4 %*% multikron(I, QFT4 %*% SW) %*% REV3 - QFT8) < epsilon)
 
-stopifnot(Mod(REV3 %*% multikron(H, II) %*% CB4 %*% multikron(I, QFT4) %*% selSW(0, 1, 3) - rQFT8) < epsilon)
+stopifnot(Mod(REV3 %*% multikron(H, II) %*% CB4 %*% multikron(I, QFT4) %*% swap(0, 1, 3) - rQFT8) < epsilon)
 stopifnot(Mod(REV3 %*% multikron(H, II) %*% CB4 %*% multikron(I, QFT4 %*% SW) - rQFT8) < epsilon)
 
 # qiskit QFT8 with un-reversed QFT4
@@ -1269,9 +1269,24 @@ cfract(pi)
 abs(eval(parse(text = cfract(pi))) - pi) < 1e-100
 
 # ---- 7^x mod 15 circuit
-mul7m15 = multikron(rep(list(X), 4)) %*% selSW(0, 1, 4) %*% selSW(1, 2, 4) %*% selSW(2, 3, 4) 
-all(mul7m15 %*% as.qubit(8, 4) == as.qubit(sum(2^(0:3)*as.bits(7, 4)), 4))
-for (pow in 2:500)
-    stopifnot(all(Reduce("%*%", rep(list(mul7m15), pow)) %*% as.qubit(8, 4) == as.qubit(sum(2^(0:3)*as.bits(modpow(7, pow, 15), 4)), 4)))
+# https://qiskit.org/textbook/ch-algorithms/shor.html#3.-Qiskit-Implementation
+#
+n = 4
+mul7m15 = multikron(rep(list(X), n)) %*% swap(0, 1, n) %*% swap(1, 2, n) %*% swap(2, 3, n) 
+for (power in 1:255)
+    stopifnot(all(Reduce("%*%", rep(list(mul7m15), power)) %*% as.qubit(8, n) == as.qubit(sum(2^(1:n-1) * as.bits(modpow(7, power, 15), n)), n)))
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
