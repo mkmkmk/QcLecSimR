@@ -203,7 +203,7 @@ ctr_gate = function(gate)
 {
     n = nrow(gate)
     stopifnot(abs(2^round(log2(n)) - n) < epsilon)
-    I_n = multikron(rep(list(I), log2(n)))
+    I_n = diag(1, n)
     zeros = diag(0, n)
     rbind(cbind(I_n, zeros), cbind(zeros, gate))
 }
