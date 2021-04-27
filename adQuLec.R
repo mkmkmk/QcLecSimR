@@ -99,9 +99,9 @@ dud = kronecker(ROT(pi/2/N), diag(1,2))
 qcirc = dud
 qcirc = bomb
 {
-    ctrl = q0
+    ctl = q0
     probe = q0
-    state = kronecker(ctrl, probe)
+    state = kronecker(ctl, probe)
     for(i in 1:N)
     {
         state = qcirc %*% state
@@ -447,8 +447,8 @@ qcirc = hbase %*% cminusNOT %*% kronecker(ROT(pi/2/N), diag(1,2))
 alfa = qm
 meas = list(q01, q11)
 {
-    ctrl = q0
-    state = kronecker(ctrl, alfa)
+    ctl = q0
+    state = kronecker(ctl, alfa)
     for(i in 1:N)
     {
         state = postmeas(qcirc %*% state, meas)
@@ -480,8 +480,8 @@ alfa = q1
 meas = list(q10, q11)
 # --
 {
-    ctrl = q0
-    state = kronecker(alfa, ctrl)
+    ctl = q0
+    state = kronecker(alfa, ctl)
     for(i in 1:N)
         state = postmeas(qcirc %*% state, meas)
     state
@@ -1157,7 +1157,7 @@ all(Mod(multikron(I, QFT4) - rbind(cbind(QFT4, ZR4), cbind(ZR4, QFT4))) < epsilo
 
 # (20.14)
 # controlled B4
-CB4 = ctr_gate(gate = B4)
+CB4 = ctrl(gate = B4)
 
 stopifnot(Mod(CB4 %*% rbind(cbind(QFT4, ZR4), cbind(ZR4, QFT4)) - rbind(cbind(QFT4, ZR4), cbind(ZR4, B4%*%QFT4))) < epsilon)
 
@@ -1187,7 +1187,7 @@ stopifnot(Mod(multikron(H, II) %*% CB4 %*% multikron(I, QFT4) - preF8) < epsilon
 # ----- QFT4
 rQFT4 = SW %*% QFT4 %*% SW
 ZR2 = diag(0, 2)
-CB3 = ctr_gate(gate = B2)
+CB3 = ctrl(gate = B2)
 
 stopifnot(Mod(multikron(H, I) %*% CB3 %*% multikron(I, H) %*% SW - QFT4) < epsilon)
 stopifnot(Mod(SW %*% multikron(I, H) %*% CB3 %*% multikron(H, I) - QFT4) < epsilon)
@@ -1217,10 +1217,10 @@ QFT16 = QFT(16)
 B8 = diag(exp(2i*pi/16)^(0:8), 8)
 III = multikron(rep(list(I), 3))
 # ZR8 = diag(0, 8)
-CB16 = ctr_gate(gate = B8)
+CB16 = ctrl(gate = B8)
 
-stopifnot(Mod(ctr_gate(gate = B4) - CB4) < epsilon)
-stopifnot(Mod(ctr_gate(gate = B8) - CB16) < epsilon)
+stopifnot(Mod(ctrl(gate = B4) - CB4) < epsilon)
+stopifnot(Mod(ctrl(gate = B8) - CB16) < epsilon)
 
 
 # qclec QFT16 with un-reversed QFT8

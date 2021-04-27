@@ -199,7 +199,7 @@ stopifnot(swap(3, 2, 4) == multikron(SW, I, I))
 stopifnot(swap(1, 2, 4) == swap(2, 1, 4))
 
 
-ctr_gate = function(gate)
+ctrl = function(gate)
 {
     n = nrow(gate)
     stopifnot(abs(2^round(log2(n)) - n) < epsilon)
@@ -207,4 +207,8 @@ ctr_gate = function(gate)
     zeros = diag(0, n)
     rbind(cbind(I_n, zeros), cbind(zeros, gate))
 }
-stopifnot(Mod(ctr_gate(gate = NOT) - CNOT) < epsilon)
+stopifnot(Mod(ctrl(X) - CX) < epsilon)
+
+
+
+
