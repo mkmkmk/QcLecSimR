@@ -995,12 +995,11 @@ CX23r = multikron(I, I, CX)
 balanced_right = CX23r %*% CX13r %*% CX03r 
 
 stopifnot(all(balanced_left == REV4 %*% balanced_right %*% REV4))
-
-all(CX03r == swap(1, 3, 4) %*% multikron(I, I, CX) %*% swap(1, 3, 4))
-all(CX03l == swap(2, 0, 4) %*% multikron(SW %*% CX %*% SW, I, I) %*% swap(2, 0, 4))
-
-all(multikron(SW %*% CX %*% SW, I, I) == multikron(SW, I, I) %*% multikron(CX, I, I) %*% multikron(SW, I, I) )
-
+stopifnot(all(CX03r == swap(1, 3, 4) %*% multikron(I, I, CX) %*% swap(1, 3, 4)))
+stopifnot(all(CX13r == swap(1, 2, 4) %*% multikron(I, I, CX) %*% swap(1, 2, 4)))
+stopifnot(all(CX03l == swap(2, 0, 4) %*% multikron(SW %*% CX %*% SW, I, I) %*% swap(2, 0, 4)))
+stopifnot(all(CX03l == swap(2, 0, 4) %*% multikron(revctrl(X), I, I) %*% swap(2, 0, 4)))
+stopifnot(all(multikron(SW %*% CX %*% SW, I, I) == multikron(SW, I, I) %*% multikron(CX, I, I) %*% multikron(SW, I, I) ))
 
 balanced_left %*% as.qubit(0, 4)
 balanced_left %*% as.qubit(3, 4)
