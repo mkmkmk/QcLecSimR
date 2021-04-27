@@ -174,11 +174,14 @@ stopifnot(revBits(4) == REV4)
 
 # swap selected bits 
 # bit indexes: ..543210
-swap = function(b1, b2, n)
+swap = function(b1, b2, n, rev = FALSE)
 {
     stopifnot(b1 < n && b2 < n && b1 >= 0 && b2 >= 0)
-    b1 = n - 1 - b1
-    b2 = n - 1 - b2
+    if (!rev)
+    {
+        b1 = n - 1 - b1
+        b2 = n - 1 - b2
+    }
     res = diag(0, 2^n)
     for(x in 0:(2^n-1))
     {
