@@ -19,7 +19,7 @@ if (FALSE)
     rm(list=ls())
 
 source("quSimLib.R")
-
+source("modpow.R")
 
 # ------ ad (2.8)
 {
@@ -1267,3 +1267,11 @@ eval(parse(text = cfract(pi, 4))) - pi
 
 cfract(pi)
 abs(eval(parse(text = cfract(pi))) - pi) < 1e-100
+
+# ---- 7^x mod 15 circuit
+mul7m15 = multikron(rep(list(X), 4)) %*% selSW(0, 1, 4) %*% selSW(1, 2, 4) %*% selSW(2, 3, 4) 
+all(mul7m15 %*% as.qubit(8, 4) == as.qubit(sum(2^(0:3)*as.bits(7, 4)), 4))
+for (pow in 2:500)
+    stopifnot(all(Reduce("%*%", rep(list(mul7m15), pow)) %*% as.qubit(8, 4) == as.qubit(sum(2^(0:3)*as.bits(modpow(7, pow, 15), 4)), 4)))
+
+
