@@ -1314,10 +1314,10 @@ shor4b =
     swap(0, 3, 8) %*% multikron(revctrl(Reduce("%*%", rep(list(mulmod), 1))), diag(1, 8)) %*% swap(0, 3, 8) %*%
     multikron(multikron(X, III), multikron(rep(list(H), 4))) 
 
-sh16state = shor4b %*% as.qubit(0, 8)
+sh4state = shor4b %*% as.qubit(0, 8)
 
-# plot(Mod(sh16state), type='l', col='blue')
-which(Mod(sh16state) > 1e-4)
+# plot(Mod(sh4state), type='l', col='blue')
+which(Mod(sh4state) > 1e-4)
 
 meas4b = c()
 for (val in 0:15)
@@ -1328,12 +1328,12 @@ for (val in 0:15)
     {
         bval = c(as.bits(mix, 4), as.bits(val, 4))
         rval = sum(2^(7:0) * bval)
-        ires = ires + Mod(t(Conj(as.qubit(rval, 8))) %*% sh16state)^2
+        ires = ires + Mod(t(Conj(as.qubit(rval, 8))) %*% sh4state)^2
     }
     meas4b = c(meas4b, ires)
 }
 
-#plot(Mod(meas4b), col='blue')
+# plot(Mod(meas4b), col='blue')
 which(Mod(meas4b) > 1e-4) - 1
 diff(which(Mod(meas4b) > 1e-4))
 
