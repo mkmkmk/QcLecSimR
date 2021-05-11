@@ -82,6 +82,8 @@ postmeas = function(state, ...)
     res = 0
     for (basis in measBasis)
         res = res + (Conj(t(basis)) %*% state)[1,1] * basis
+    if (sum(Mod(res)) < epsilon)
+        return(0)
     res / sqrt(sum(Mod(res)^2)) # eq. (5.1)
 }
 
