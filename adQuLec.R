@@ -601,22 +601,22 @@ eq104 =  kronecker(HI, I) %*% eq103
 # if Alice sees:
 ifAliceSees = q00
 postm = postmeas(eq104, list(kronecker(ifAliceSees, q0), kronecker(ifAliceSees, q1)))
-stopifnot(all(Mod(postm - multikron(ifAliceSees, alfa*q0 + beta*q1)) < 1e-9))
+stopifnot(all(Mod(postm - multikron(ifAliceSees, alfa*q0 + beta*q1)) < epsilon))
 
 ifAliceSees = q01
 postm = postmeas(eq104, list(kronecker(ifAliceSees, q0), kronecker(ifAliceSees, q1)))
 postm = kronecker(II, X) %*% postm
-stopifnot(all(Mod(postm - multikron(ifAliceSees, alfa*q0 + beta*q1)) < 1e-9))
+stopifnot(all(Mod(postm - multikron(ifAliceSees, alfa*q0 + beta*q1)) < epsilon))
 
 ifAliceSees = q10
 postm = postmeas(eq104, list(kronecker(ifAliceSees, q0), kronecker(ifAliceSees, q1)))
 postm = kronecker(II, Z) %*% postm
-stopifnot(all(Mod(postm - multikron(ifAliceSees, alfa*q0 + beta*q1)) < 1e-9))
+stopifnot(all(Mod(postm - multikron(ifAliceSees, alfa*q0 + beta*q1)) < epsilon))
 
 ifAliceSees = q11
 postm = postmeas(eq104, list(kronecker(ifAliceSees, q0), kronecker(ifAliceSees, q1)))
 postm = kronecker(II, Z) %*% kronecker(II, X) %*% postm
-stopifnot(all(Mod(postm - multikron(ifAliceSees, alfa*q0 + beta*q1)) < 1e-9))
+stopifnot(all(Mod(postm - multikron(ifAliceSees, alfa*q0 + beta*q1)) < epsilon))
 # ok!!!!
 
 CNOTI = kronecker(CNOT, I)
