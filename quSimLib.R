@@ -221,6 +221,6 @@ revctrl = function(gate)
     rv = revBits(log2(nrow(ct)))
     rv %*% ct %*% rv
 }
-stopifnot(Mod(revctrl(gate = X) - SW %*%CX %*% SW) < epsilon)
+stopifnot(Mod(revctrl(gate = X) - SW %*% CX %*% SW) < epsilon)
 
 

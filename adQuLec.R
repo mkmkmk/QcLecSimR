@@ -1415,11 +1415,12 @@ bitEncoder %*% inpState
 stopifnot(Mod(bitEncoder %*% inpState - (amp[1] * as.qubit(0, 3) + amp[2] * as.qubit(7, 3))) < epsilon)
 
 # bit flip correction
-for(ii in 1:20)
+# Fig. 27.5
+for (ii in 1:20)
 {
     amp = exp(2i * pi * runif(2)) / sqrt(2)
     inpBit = amp[1] * q0 + amp[2] * q1
-    # Fig. 27.5
+
     bitDecoder = 
         swap(2, 3, 5) %*% multikron(RCX, I, I, I) %*% swap(2, 3, 5) %*%
         swap(1, 3, 5) %*% multikron(RCX, I, I, I) %*% swap(1, 3, 5) %*%
@@ -1456,7 +1457,7 @@ for(ii in 1:20)
     
     mbase = list()
     for(k in 1:2^3)
-        mbase[[k]] = kronecker(as.qubit(meas, 2), as.qubit(k - 1, 3))
+        mbase[[k]] = multikron(as.qubit(meas, 2), as.qubit(k - 1, 3))
     postm = postmeas(decState, mbase)
     postm
     
