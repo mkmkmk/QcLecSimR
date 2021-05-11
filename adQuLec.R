@@ -623,11 +623,9 @@ CNOTI = kronecker(CNOT, I)
 HII = multikron(H, I, I)
 for(ii in 1:200)
 {
-    amp = runif(2) + 1i * runif(2)
-    norm = sqrt(sum(Mod(amp)^2))
-    amp = amp / norm
-    inputState = amp[1]*q0 + amp[2]*q1
-    transCirc =  HII %*% CNOTI %*% kronecker(inputState, bell) 
+    amp = exp(2i * pi * runif(2)) / sqrt(2)
+    inputState = amp[1] * q0 + amp[2] * q1
+    transCirc = HII %*% CNOTI %*% kronecker(inputState, bell) 
     # (in fact, Alice's measurement results do not have equal probabilities)
     ifAliceSeesInt = round(runif(1, 0, 3))
     ifAliceSees = as.qubit(ifAliceSeesInt, 2)
