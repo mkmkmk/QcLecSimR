@@ -627,7 +627,7 @@ for(ii in 1:200)
     inputState = amp[1] * q0 + amp[2] * q1
     transCirc = HII %*% CNOTI %*% kronecker(inputState, bell) 
     # (in fact, Alice's measurement results do not have equal probabilities)
-    ifAliceSeesInt = round(runif(1, 0, 3))
+    ifAliceSeesInt = sample(0:3, 1)
     ifAliceSees = as.qubit(ifAliceSeesInt, 2)
     postm = postmeas(transCirc, kronecker(ifAliceSees, q0), kronecker(ifAliceSees, q1))
     if (ifAliceSeesInt %% 2 == 1)
@@ -1427,7 +1427,7 @@ for (ii in 1:20)
         swap(1, 2, 5) %*% multikron(I, RCX, I, I) %*% swap(1, 2, 5) %*%
         swap(0, 2, 5) %*% multikron(I, RCX, I, I) %*% swap(0, 2, 5) 
     
-    randFlip = round(runif(1, 0, 3))
+    randFlip = sample(0:3, 1)
     
     # no error state
     if(randFlip == 0)
