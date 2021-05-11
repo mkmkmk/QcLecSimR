@@ -582,9 +582,9 @@ if (FALSE)
 # ----- AD lecture 10
 
 # quantum teleportation
-
 # eq. 10.2
 alfa = .666
+alfa = runif(1)
 beta = (1-alfa^2)^.5
 eq102 = kronecker(alfa*q0 + beta*q1, bell) 
 eq102 * sqrt(2) # ok
@@ -601,26 +601,43 @@ eq104 =  kronecker(HI, I) %*% eq103
 # if Alice sees:
 ifAliceSees = q00
 postm = postmeas(eq104, list(kronecker(ifAliceSees, q0), kronecker(ifAliceSees, q1)))
-postm
+stopifnot(all(Mod(postm - multikron(ifAliceSees, alfa*q0 + beta*q1)) < 1e-9))
 
 ifAliceSees = q01
 postm = postmeas(eq104, list(kronecker(ifAliceSees, q0), kronecker(ifAliceSees, q1)))
-postm
 postm = kronecker(II, X) %*% postm
-postm
-all(Mod(postm - multikron(ifAliceSees, alfa*q0 + beta*q1)) < 1e-9)
-
+stopifnot(all(Mod(postm - multikron(ifAliceSees, alfa*q0 + beta*q1)) < 1e-9))
 
 ifAliceSees = q10
 postm = postmeas(eq104, list(kronecker(ifAliceSees, q0), kronecker(ifAliceSees, q1)))
-postm
-kronecker(II, Z) %*% postm
+postm = kronecker(II, Z) %*% postm
+stopifnot(all(Mod(postm - multikron(ifAliceSees, alfa*q0 + beta*q1)) < 1e-9))
 
 ifAliceSees = q11
 postm = postmeas(eq104, list(kronecker(ifAliceSees, q0), kronecker(ifAliceSees, q1)))
-postm
-kronecker(II, Z) %*% kronecker(II, X) %*% postm
+postm = kronecker(II, Z) %*% kronecker(II, X) %*% postm
+stopifnot(all(Mod(postm - multikron(ifAliceSees, alfa*q0 + beta*q1)) < 1e-9))
 # ok!!!!
+
+CNOTI = kronecker(CNOT, I)
+HII = multikron(H, I, I)
+for(ii in 1:200)
+{
+    amp = runif(2) + 1i * runif(2)
+    norm = sqrt(sum(Mod(amp)^2))
+    amp = amp / norm
+    inputState = amp[1]*q0 + amp[2]*q1
+    transCirc =  HII %*% CNOTI %*% kronecker(inputState, bell) 
+    # (in fact, Alice's measurement results do not have equal probabilities)
+    ifAliceSeesInt = round(runif(1, 0, 3))
+    ifAliceSees = as.qubit(ifAliceSeesInt, 2)
+    postm = postmeas(transCirc, kronecker(ifAliceSees, q0), kronecker(ifAliceSees, q1))
+    if (ifAliceSeesInt %% 2 == 1)
+        postm = kronecker(II, X) %*% postm
+    if (trunc(ifAliceSeesInt / 2) == 1)
+        postm = kronecker(II, Z) %*% postm
+    stopifnot(all(Mod(postm - multikron(ifAliceSees, inputState)) < 1e-9))
+}
 
 # -------
 # teleportation of half of another Bell's pair
