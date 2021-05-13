@@ -32,6 +32,7 @@ CNOT = kronecker(q0 %*% t(q0), I) + kronecker(q1 %*% t(q1), NOT)
 CX = CNOT
 ROT = function(th) matrix(c(cos(th), sin(th), -sin(th), cos(th)), 2, 2)
 
+
 NOTI = kronecker(NOT, I)
 H2 = kronecker(H, H)
 IH = kronecker(I, H)
@@ -52,6 +53,15 @@ II = kronecker(I, I)
 bell = CNOT %*% HI %*% q00
 
 requal = function(a, b, dig=10) round(a, dig) == round(b, dig)
+
+ROTZ = function(th) matrix(c(exp(-1i*th/2), 0, 0, exp(1i*th/2)), 2, 2)
+stopifnot(Mod(exp(1i*pi/8) * ROTZ(pi/4) - Tg) < epsilon)
+stopifnot(Mod(exp(1i*pi/4) * ROTZ(pi/2) - S) < epsilon)
+
+(Mod(S %*% S - Z) < epsilon)
+(Mod(Tg %*% Tg - S) < epsilon)
+(Mod(Tg %*% Tg %*% Tg %*% Tg - Z) < epsilon)
+
 
 toBloch = function (qbit)
 {
