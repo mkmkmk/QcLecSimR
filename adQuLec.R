@@ -1414,18 +1414,19 @@ bitEncoder = swap(0, 1, 3) %*% multikron(RCX, I) %*% swap(0, 1, 3) %*% multikron
 bitEncoder %*% inpState 
 stopifnot(Mod(bitEncoder %*% inpState - (amp[1] * as.qubit(0, 3) + amp[2] * as.qubit(7, 3))) < epsilon)
 
+bitDecoder = 
+    swap(2, 3, 5) %*% multikron(RCX, I, I, I) %*% swap(2, 3, 5) %*%
+    swap(1, 3, 5) %*% multikron(RCX, I, I, I) %*% swap(1, 3, 5) %*%
+    swap(1, 2, 5) %*% multikron(I, RCX, I, I) %*% swap(1, 2, 5) %*%
+    swap(0, 2, 5) %*% multikron(I, RCX, I, I) %*% swap(0, 2, 5) 
+
+
 # bit flip correction
 # Fig. 27.5
 for (ii in 1:20)
 {
     amp = exp(2i * pi * runif(2)) / sqrt(2)
     inpBit = amp[1] * q0 + amp[2] * q1
-
-    bitDecoder = 
-        swap(2, 3, 5) %*% multikron(RCX, I, I, I) %*% swap(2, 3, 5) %*%
-        swap(1, 3, 5) %*% multikron(RCX, I, I, I) %*% swap(1, 3, 5) %*%
-        swap(1, 2, 5) %*% multikron(I, RCX, I, I) %*% swap(1, 2, 5) %*%
-        swap(0, 2, 5) %*% multikron(I, RCX, I, I) %*% swap(0, 2, 5) 
     
     randFlip = sample(0:3, 1)
     
