@@ -1,7 +1,6 @@
 # ----------------------
 # QuSimR "library" code
 #
-#
 #   Author:  Mariusz Krej
 #
 # ----------------------
@@ -37,8 +36,23 @@ NOTI = kronecker(NOT, I)
 H2 = kronecker(H, H)
 IH = kronecker(I, H)
 HI = kronecker(H, I)
+
+# ----- SWAP 
+#
+#     00 01 10 11    
+# 00   1  0  0  0 
+# 01   0  0  1  0    
+# 10   0  1  0  0
+# 11   0  0  0  1
+matrix(c(1,0,0,0, 0,0,1,0, 0,1,0,0, 0,0,0,1), 4)
 SWAP = matrix(c(1,0,0,0, 0,0,1,0, 0,1,0,0, 0,0,0,1), 4)
 SW = SWAP
+# tests
+stopifnot(Mod(SWAP %*% q00 - q00) < epsilon)
+stopifnot(Mod(SWAP %*% q10 - q01) < epsilon)
+stopifnot(Mod(SWAP %*% q01 - q10) < epsilon)
+stopifnot(Mod(SWAP %*% q11 - q11) < epsilon)
+
 
 Z = matrix(c(1, 0, 0, -1), 2, 2)
 Y = matrix(c(0, 1i, -1i, 0), 2, 2)
@@ -231,6 +245,21 @@ revctrl = function(gate)
     rv = revBits(log2(nrow(ct)))
     rv %*% ct %*% rv
 }
-stopifnot(Mod(revctrl(gate = X) - SW %*% CX %*% SW) < epsilon)
+
+RCX = revctrl(X)
+stopifnot(Mod(RCX - SW %*% CX %*% SW) < epsilon)
+
+
+# Quantum Fourier Transform
+QFT = function(n)
+{
+    w = exp(2i*pi/n) 
+    res = diag(0, n)
+    for(i in 0:(n-1))
+        for(j in 0:(n-1))
+            res[1+i, 1+j] = w^(i*j)
+    res / sqrt(n)
+}
+stopifnot(max(Mod(QFT(2) - H)) < epsilon)
 
 

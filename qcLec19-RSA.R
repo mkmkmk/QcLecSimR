@@ -1,3 +1,13 @@
+# ----------------------
+# ----------     AD S. Aaronson, Introduction to Quantum Information Science Lecture Notes
+# ----------     https://www.scottaaronson.com/qclec.pdf
+# ----------------------
+# 
+# This script is designed to run line by line --> RStudio and Ctrl + Enter
+#
+#   Author:  Mariusz Krej
+#
+# ----------------------
 # ad RSA encryption
 #
 # https://www.scottaaronson.com/democritus/lec8.html
@@ -72,10 +82,12 @@ if(FALSE)
 # (after the end of the period there is 1, because it is a copy of x^0, the next is x^1)
 k = which((c*(1:Npq)) %% Npq == 1)[1]
 stopifnot(!is.na(k))
-k
-(c*k) %% Npq
-(c*(1:Npq)) %% Npq
-
+if (FALSE)
+{
+    k
+    (c*k) %% Npq
+    (c*(1:Npq)) %% Npq
+}
 # this is x !! 
 res = modpow(retval, k, N)
 stopifnot(res == x)
