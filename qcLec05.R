@@ -103,12 +103,13 @@ kronecker(H %*% q0, q0)
 HI %*% bell
 
 # If Alice sees |0〉
-# wg. eq. (5.1)
+# eq. (5.1)
 alfa = .5 # == beta
 scale = (alfa^2+alfa^2)^.5
 alfa/scale
 1/2^.5
 
+# ad Entanglement
 # Bell pair, if (after meas) one of pair is |0〉then ...
 postmeas(bell, q00, q10) # ... both are |0〉
 postmeas(bell, q00, q01) # ... both are |0〉
