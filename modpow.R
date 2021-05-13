@@ -1,6 +1,10 @@
-library(Rcpp)
-
+# Modular exponentiation
 # https://en.wikipedia.org/wiki/Modular_exponentiation
+#
+#
+#   Author:  Mariusz Krej
+#
+library(Rcpp)
 
 if (FALSE)
 {
