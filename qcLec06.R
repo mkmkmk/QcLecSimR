@@ -61,7 +61,7 @@ qr(q1 %*% t(Conj(q1)))$rank
 qr((q0 %*% t(Conj(q0)) + q1 %*% t(Conj(q1))) / 2 )$rank
 qr(qp %*% t(Conj(qp)))$rank
 
-# eq. (6.9) --> ok but ⊗ is missing
+# eq. (6.9) --> ok
 (q00 + q01 + q10) / sqrt(3)
 kronecker(q0, qp) * sqrt(2/3) + kronecker(q1, q0) * sqrt(1/3)  # ok!
 eq69 = (q00 + q01 + q10) / sqrt(3)
