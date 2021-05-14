@@ -18,6 +18,15 @@
 #
 
 library(pracma)
+
+if("rstudioapi" %in% rownames(installed.packages()) && rstudioapi::isAvailable())
+    setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+getwd()
+
+if (FALSE)
+    rm(list=ls())
+
+
 source("modpow.R")
 
 epsilon = 1e-12
@@ -169,4 +178,5 @@ if (
     stopifnot(any(abs(c(q, p) - rec) < epsilon))
 
 }
+
 
